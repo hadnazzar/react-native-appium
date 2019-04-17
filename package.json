@@ -7,11 +7,16 @@
     "start:android": "adb uninstall com.apktest && react-native run-android",
     "start:android:release": "react-native run-android --variant=release",
     "test": "jest",
-    "appium": "appium",
+    "appium": "appium:start",
     "appium:test": "mocha --timeout 20000 __tests__/appium-test-wd.js",
     "clean:nodemodules": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "build:android": "cd android && ./gradlew assembleRelease",
-    "bs:android": "npm run build:android && adb uninstall com.apktest && npm run start:android:release"
+    "bs:android": "npm run build:android && adb uninstall com.apktest && npm run start:android:release",
+    "appium:start": "appium & echo $! > /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; echo \"Started server (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\";",
+    "pree2e": "npm run appium:kill; npm run appium:start",
+    "e2e": "npm run appium:test",
+    "poste2e": "npm run appium:kill",
+    "appium:kill": "if [ -f /tmp/$(node -p 'require(\"./package.json\").name').appium.pid ]; then echo \"Killing appium (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\"; kill -9 `cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`; rm /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; fi;"
   },
   "dependencies": {
     "react": "16.8.3",
