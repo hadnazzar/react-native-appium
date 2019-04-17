@@ -27,7 +27,7 @@ describe('Create Android session', function () {
 
     // Start the session
     await driver.init(androidOpt)
-      .setImplicitWaitTimeout(5000)
+      .setImplicitWaitTimeout(15 * 1000)
   });
 
   after(async function () {

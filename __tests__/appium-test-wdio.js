@@ -34,7 +34,7 @@ before(async function () {
 
   // NOTE-RT: Setting an implicit wait timeout isn't supported for mobile yet...
   // await client.setTimeout({
-  //   implicit: 5 * 1000
+  //   implicit: 15 * 1000
   // })
 });
 
