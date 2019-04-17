@@ -1,0 +1,3 @@
+rootProject.name = 'apktest'
+
+include ':app'

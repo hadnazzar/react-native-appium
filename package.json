@@ -1,0 +1,36 @@
+{
+  "name": "apktest",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:android": "adb uninstall com.apktest && react-native run-android",
+    "start:android:release": "react-native run-android --variant=release",
+    "test": "jest",
+    "appium": "appium",
+    "appium:test": "mocha --timeout 20000 __tests__/appium-test-wd.js",
+    "clean:nodemodules": "rm -rf node_modules && rm -f package-lock.json && npm install",
+    "build:android": "cd android && ./gradlew assembleRelease",
+    "bs:android": "npm run build:android && adb uninstall com.apktest && npm run start:android:release"
+  },
+  "dependencies": {
+    "react": "16.8.3",
+    "react-native": "0.59.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "appium": "^1.12.1",
+    "babel-jest": "^24.7.1",
+    "chai": "^4.2.0",
+    "jest": "^24.7.1",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "mocha": "^6.1.3",
+    "react-test-renderer": "16.8.3",
+    "wd": "^1.11.1",
+    "webdriverio": "^5.7.14"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
