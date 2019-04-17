@@ -1,32 +1,18 @@
-const wd = require('wd');
-const path = require('path');
-
-
-const androidOpt = {
-  platformName: 'Android',
-  automationName: 'UiAutomator2',
-  deviceName: 'Android Emulator',
-  platformVersion: null,
-  app: path.resolve(__dirname, '../../android/app/build/outputs/apk/release/app-release.apk')
-};
-
-const serverConfig = {
-  host: process.env.APPIUM_HOST || 'localhost',
-  port: process.env.APPIUM_PORT || 4723,
-  logLevel: 'info'
-};
+import * as wd from 'wd';
+import * as capabilities from '../capabilities';
+import {DEVICE_TIMEOUT, JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
 
 let driver;
 
 beforeAll(async () => {
-  jest.setTimeout(30 * 1000);
+  jest.setTimeout(JEST_TIMEOUT);
 
   // Connect to Appium server
-  driver = await wd.promiseChainRemote(serverConfig);
+  driver = await wd.promiseChainRemote(capabilities[TARGET_PLATFORM]);
 
   // Start the session
-  await driver.init(androidOpt)
-    .setImplicitWaitTimeout(15 * 1000);
+  await driver.init(capabilities[TARGET_PLATFORM].capabilities)
+    .setImplicitWaitTimeout(DEVICE_TIMEOUT);
 });
 
 afterAll(async () => {

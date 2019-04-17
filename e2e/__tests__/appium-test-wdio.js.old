@@ -1,37 +1,13 @@
-const wdio = require('webdriverio');
-const path = require('path');
-
-
-const androidOpt = {
-  platformName: 'Android',
-  automationName: 'UiAutomator2',
-  deviceName: 'Android Emulator',
-  platformVersion: null,
-  app: undefined // Will be added in tests
-};
-
-const serverConfig = {
-  host: process.env.APPIUM_HOST || 'localhost',
-  port: process.env.APPIUM_PORT || 4723,
-  logLevel: 'info'
-};
-
-const androidOptions = Object.assign(
-  {
-    capabilities: androidOpt
-  },
-  serverConfig
-);
-
-const app = path.resolve(__dirname, '../../android/app/build/outputs/apk/release/app-release.apk');
-androidOptions.capabilities.app = app;
+import * as wdio from 'webdriverio';
+import * as capabilities from '../capabilities';
+import {JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
 
 let client;
 
 beforeAll(async () => {
-  jest.setTimeout(30 * 1000);
+  jest.setTimeout(JEST_TIMEOUT);
 
-  client = await wdio.remote(androidOptions);
+  client = await wdio.remote(capabilities[TARGET_PLATFORM]);
 
   // NOTE-RT: Setting an implicit wait timeout isn't supported for mobile yet...
   // await client.setTimeout({
