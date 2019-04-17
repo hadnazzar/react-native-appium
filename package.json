@@ -8,7 +8,7 @@
     "start:android:release": "react-native run-android --variant=release",
     "test": "jest --config jest.config.json",
     "appium": "appium:start",
-    "appium:test": "jest --config e2e/jest.config.json",
+    "appium:test": "jest --config e2e/jest.config.json --runInBand",
     "clean:nodemodules": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "build:android": "cd android && ./gradlew assembleRelease",
     "bs:android": "npm run build:android && adb uninstall com.apktest && npm run start:android:release",
