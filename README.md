@@ -11,7 +11,7 @@
 ```javascript
 npm install
 ```
-###Create your Signed APK (For android)
+### Create your Signed APK (For android)
 
 [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android#docsNav)
 
