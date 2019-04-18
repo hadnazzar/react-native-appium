@@ -1,0 +1,9 @@
+{
+  "preset": "react-native",
+  "rootDir": "./",
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/e2e/"
+  ],
+  "verbose": true
+}
