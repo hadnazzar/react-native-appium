@@ -3,35 +3,35 @@ import * as wd from 'wd';
 import * as capabilities from '../capabilities';
 import {DEVICE_TIMEOUT, JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
 
-let driver;
-
-beforeAll(async () => {
-  jest.setTimeout(JEST_TIMEOUT);
-
-  const {capabilities: deviceConfig, ...serverConfig} = capabilities[TARGET_PLATFORM];
-
-  if (process.env.BROWSERSTACK) {
-    deviceConfig.name = path.basename(__filename, path.extname(__filename));
-  }
-
-  console.debug('[beforeAll] initializing driver serverConfig %j and capabilities %j', serverConfig, deviceConfig);
-
-  // Connect to Appium server
-  driver = await wd.promiseChainRemote(serverConfig);
-
-  // Start the session
-  await driver.init(deviceConfig)
-    .setImplicitWaitTimeout(DEVICE_TIMEOUT)
-    .sleep(5000);
-
-  console.info('[beforeAll] driver initialized %j', driver);
-});
-
-afterAll(async () => {
-  await driver.quit();
-});
-
 describe('Create Android session (wd)', () => {
+  let driver;
+
+  beforeAll(async () => {
+    jest.setTimeout(JEST_TIMEOUT);
+
+    const {capabilities: deviceConfig, ...serverConfig} = capabilities[TARGET_PLATFORM];
+
+    if (process.env.BROWSERSTACK) {
+      deviceConfig.name = path.basename(__filename, path.extname(__filename));
+    }
+
+    console.debug('[beforeAll] initializing driver serverConfig %j and capabilities %j', serverConfig, deviceConfig);
+
+    // Connect to Appium server
+    driver = await wd.promiseChainRemote(serverConfig);
+
+    // Start the session
+    await driver.init(deviceConfig)
+      .setImplicitWaitTimeout(DEVICE_TIMEOUT)
+      .sleep(5000);
+
+    console.info('[beforeAll] driver initialized %j', driver);
+  });
+
+  afterAll(async () => {
+    await driver.quit();
+  });
+
   // NOTE-RT: BrowserStack doesn't seem to support `getCurrentPackage`
   xit('verify the running application', async () => {
     // Check that we're running the ApiDemos app by checking package and activity

@@ -3,35 +3,35 @@ import * as capabilities from '../capabilities';
 import {JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
 import path from 'path';
 
-let client;
+xdescribe('Create Android session (wdio)', () => {
+  let client;
 
-beforeAll(async () => {
-  jest.setTimeout(JEST_TIMEOUT);
+  beforeAll(async () => {
+    jest.setTimeout(JEST_TIMEOUT);
 
-  const config = capabilities[TARGET_PLATFORM];
+    const config = capabilities[TARGET_PLATFORM];
 
-  if (process.env.BROWSERSTACK) {
-    config.capabilities.name = path.basename(__filename, path.extname(__filename));
-  }
+    if (process.env.BROWSERSTACK) {
+      config.capabilities.name = path.basename(__filename, path.extname(__filename));
+    }
 
-  console.debug('[beforeAll] initializing client with %j', config);
+    console.debug('[beforeAll] initializing client with %j', config);
 
-  client = await wdio.remote(config);
+    client = await wdio.remote(config);
 
-  // NOTE-RT: Setting an implicit wait timeout isn't supported for mobile yet...
-  // await client.setTimeout({
-  //   implicit: 15 * 1000
-  // })
+    // NOTE-RT: Setting an implicit wait timeout isn't supported for mobile yet...
+    // await client.setTimeout({
+    //   implicit: 15 * 1000
+    // })
 
-  await client.pause(5000);
-  console.info('[beforeAll] client initialized %j', client);
-});
+    await client.pause(5000);
+    console.info('[beforeAll] client initialized %j', client);
+  });
 
-afterAll(async () => {
-  await client.deleteSession();
-});
+  afterAll(async () => {
+    await client.deleteSession();
+  });
 
-describe('Create Android session (wdio)', () => {
   beforeEach(async () => {
     console.debug('[beforeEach] client.getPageSource()', await client.getPageSource()); // eslint-disable-line no-console
   });
