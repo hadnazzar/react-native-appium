@@ -1,18 +1,30 @@
 import * as wdio from 'webdriverio';
 import * as capabilities from '../capabilities';
 import {JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
+import path from 'path';
 
 let client;
 
 beforeAll(async () => {
   jest.setTimeout(JEST_TIMEOUT);
 
-  client = await wdio.remote(capabilities[TARGET_PLATFORM]);
+  const config = capabilities[TARGET_PLATFORM];
+
+  if (process.env.BROWSERSTACK) {
+    config.capabilities.name = path.basename(__filename, path.extname(__filename));
+  }
+
+  console.debug('[beforeAll] initializing client with %j', config);
+
+  client = await wdio.remote(config);
 
   // NOTE-RT: Setting an implicit wait timeout isn't supported for mobile yet...
   // await client.setTimeout({
   //   implicit: 15 * 1000
   // })
+
+  await client.pause(5000);
+  console.info('[beforeAll] client initialized %j', client);
 });
 
 afterAll(async () => {
@@ -21,12 +33,11 @@ afterAll(async () => {
 
 describe('Create Android session (wdio)', () => {
   beforeEach(async () => {
-    console.info('[beforeEach] client.getPageSource()', await client.getPageSource()); // eslint-disable-line no-console
-    console.info('[beforeEach] pausing for 5 seconds between tests...'); // eslint-disable-line no-console
-    await client.pause(5000);
+    console.debug('[beforeEach] client.getPageSource()', await client.getPageSource()); // eslint-disable-line no-console
   });
 
-  it('should create and destroy a session', async () => {
+  // NOTE-RT: BrowserStack doesn't seem to support `getCurrentPackage`
+  xit('verify the running application', async () => {
     expect(await client.getCurrentPackage()).toBe('com.apktest');
   });
 
