@@ -92,5 +92,22 @@ describe('Create Android session (wd)', () => {
     // console.log(okbutton);
     await okbutton.click();
   });
+  
+  it('Press Google Sign in and sign in succesfully', async () => {
+    console.log('Google SIGNIN');
+    let button = await driver.elementByAccessibilityId('google-signinbutton');
+    // console.log(button)
+    await button.click();
+
+    await driver.sleep(5000)
+    let contexts = await driver.contexts();
+    console.log(contexts)
+
+    await driver.context('WEBVIEW_chrome')
+
+    let context = await driver.currentContext();
+    console.log(context)
+
+  });
 
 });
