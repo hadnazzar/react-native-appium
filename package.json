@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "npm run postinstall:download:android-wait-for-emulator",
+    "postinstall:download:android-wait-for-emulator": "if [ ! -f bin/android-wait-for-emulator ]; then mkdir -p bin; curl https://raw.githubusercontent.com/travis-ci/travis-cookbooks/precise-stable/ci_environment/android-sdk/files/default/android-wait-for-emulator > bin/android-wait-for-emulator; chmod +x bin/android-wait-for-emulator; fi;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start:android": "adb uninstall com.apktest && react-native run-android",
     "start:android:release": "react-native run-android --variant=release",
@@ -19,11 +21,15 @@
     "clean:nodemodules": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "build:android": "cd android && ./gradlew assembleRelease",
     "bs:android": "npm run build:android && adb uninstall com.apktest && npm run start:android:release",
+    "emulator:android:create": "avdmanager create avd -n $(node -p 'require(\"./package.json\").name') -k \"system-images;android-28;google_apis_playstore;x86\" -d \"Nexus 5X\"",
+    "emulator:android:delete": "avdmanager delete avd -n $(node -p 'require(\"./package.json\").name')",
+    "emulator:android:start": "emulator -avd $(node -p 'require(\"./package.json\").name') -no-audio -no-window & echo $! > /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid; echo \"Started Android emulator (`cat /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid\"; ./bin/android-wait-for-emulator",
     "appium:start": "appium & echo $! > /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; echo \"Started server (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\";",
-    "pree2e": "npm run appium:kill; npm run appium:start",
+    "pree2e": "npm run emulator:android:kill; npm run emulator:android:start; npm run appium:kill; npm run appium:start",
     "e2e": "npm run appium:test",
-    "poste2e": "npm run appium:kill",
-    "appium:kill": "if [ -f /tmp/$(node -p 'require(\"./package.json\").name').appium.pid ]; then echo \"Killing appium (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\"; kill -9 `cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`; rm /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; fi;"
+    "poste2e": "npm run appium:kill; npm run emulator:android:kill",
+    "appium:kill": "if [ -f /tmp/$(node -p 'require(\"./package.json\").name').appium.pid ]; then echo \"Killing appium (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\"; kill -9 `cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`; rm /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; fi;",
+    "emulator:android:kill": "if [ -f /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid ]; then echo \"Killing Android emulator (`cat /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid\"; kill -9 `cat /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid`; rm /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid; fi;"
   },
   "dependencies": {
     "react": "16.8.3",

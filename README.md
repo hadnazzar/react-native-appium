@@ -11,7 +11,7 @@
 ### Make it run with 
 
 ```bash
-npm install
+yarn install
 ```
 
 ### Create your Signed APK (For android)
@@ -25,18 +25,23 @@ keytool -genkeypair -v -keystore my-release-key.keystore -alias my-key-alias -ke
 mv my-release-key.keystore android/app/
 
 # Build the APK
-npm run bs:android
+yarn run bs:android
 ```
 
-### Run tests
+### Run tests locally
 ```bash
 # Run unit & integration tests
-npm test
+yarn test
+
+# Create an AVD to run tests against locally
+yarn run emulator:android:create
 
 # Run E2E tests locally
-npm run test:e2e
+yarn run test:e2e
+```
 
-
+### Run tests in the cloud
+```bash
 # Setup for uploading to cloud services
 export APP_PATH=$(pwd)/android/app/build/outputs/apk/release/app-release.apk
 export APP_EXTENSION=apk
@@ -52,13 +57,13 @@ export BROWSERSTACK_USERNAME=
 export BROWSERSTACK_ACCESS_KEY=
 
 # Upload and run tests on Sauce Labs (emulated)
-npm run upload:e2e:sauce
-npm run test:e2e:sauce
+yarn run upload:e2e:sauce
+yarn run test:e2e:sauce
 # Upload and run tests on Sauce Labs (real devices)
-npm run upload:e2e:testobject
-npm run test:e2e:testobject
+yarn run upload:e2e:testobject
+yarn run test:e2e:testobject
 
 # Run it on BrowserStack
-npm run upload:e2e:browserstack
-npm run test:e2e:browserstack
+yarn run upload:e2e:browserstack
+yarn run test:e2e:browserstack
 ```
