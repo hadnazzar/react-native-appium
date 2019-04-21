@@ -66,7 +66,8 @@ export const android = {
     automationName: 'UiAutomator2',
     deviceName: ANDROID_DEVICE_NAME,
     platformVersion: ANDROID_PLATFORM_VERSION,
-    app: ANDROID_APPLICATION_PATH
+    app: ANDROID_APPLICATION_PATH,
+    adbExecTimeout: DEVICE_TIMEOUT
   }
 };
 
@@ -94,11 +95,13 @@ if (process.env.SAUCE) {
   delete android.capabilities.waitforTimeout;
   delete android.capabilities.commandTimeout;
   delete android.capabilities.newCommandTimeout;
+  delete android.capabilities.adbExecTimeout;
   android.capabilities.automationName = android.capabilities.automationName.toLowerCase(); // NOTE-RT: Sauce Labs wants this to be lowercase for some reason
 
   delete ios.capabilities.waitforTimeout;
   delete ios.capabilities.commandTimeout;
   delete ios.capabilities.newCommandTimeout;
+  delete ios.capabilities.adbExecTimeout;
 }
 
 if (process.env.TESTOBJECT) {
