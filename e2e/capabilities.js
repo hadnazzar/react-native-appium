@@ -26,7 +26,8 @@ const common = {
     appiumVersion,
     waitforTimeout: DEVICE_TIMEOUT,
     commandTimeout: DEVICE_TIMEOUT,
-    newCommandTimeout: DEVICE_TIMEOUT
+    newCommandTimeout: DEVICE_TIMEOUT,
+    isHeadless: process.env.HEADLESS || process.env.CI || false
   }
 };
 
@@ -67,7 +68,14 @@ export const android = {
     deviceName: ANDROID_DEVICE_NAME,
     platformVersion: ANDROID_PLATFORM_VERSION,
     app: ANDROID_APPLICATION_PATH,
-    adbExecTimeout: DEVICE_TIMEOUT
+    adbExecTimeout: DEVICE_TIMEOUT,
+    androidDeviceReadyTimeout: DEVICE_TIMEOUT,
+    androidInstallTimeout: DEVICE_TIMEOUT,
+    appWaitDuration: DEVICE_TIMEOUT,
+    avdLaunchTimeout: DEVICE_TIMEOUT,
+    avdReadyTimeout: DEVICE_TIMEOUT,
+    uiautomator2ServerInstallTimeout: DEVICE_TIMEOUT,
+    uiautomator2ServerLaunchTimeout: DEVICE_TIMEOUT
   }
 };
 
@@ -96,6 +104,13 @@ if (process.env.SAUCE) {
   delete android.capabilities.commandTimeout;
   delete android.capabilities.newCommandTimeout;
   delete android.capabilities.adbExecTimeout;
+  delete android.capabilities.androidDeviceReadyTimeout;
+  delete android.capabilities.androidInstallTimeout;
+  delete android.capabilities.appWaitDuration;
+  delete android.capabilities.avdLaunchTimeout;
+  delete android.capabilities.avdReadyTimeout;
+  delete android.capabilities.uiautomator2ServerInstallTimeout;
+  delete android.capabilities.uiautomator2ServerLaunchTimeout;
   android.capabilities.automationName = android.capabilities.automationName.toLowerCase(); // NOTE-RT: Sauce Labs wants this to be lowercase for some reason
 
   delete ios.capabilities.waitforTimeout;
