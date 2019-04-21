@@ -76,7 +76,8 @@ export const android = {
     avdLaunchTimeout: DEVICE_TIMEOUT,
     avdReadyTimeout: DEVICE_TIMEOUT,
     uiautomator2ServerInstallTimeout: DEVICE_TIMEOUT,
-    uiautomator2ServerLaunchTimeout: DEVICE_TIMEOUT
+    uiautomator2ServerLaunchTimeout: DEVICE_TIMEOUT,
+    disableWindowAnimation: process.env.HEADLESS || process.env.CI || false
   }
 };
 
@@ -113,6 +114,7 @@ if (process.env.SAUCE) {
   delete android.capabilities.avdReadyTimeout;
   delete android.capabilities.uiautomator2ServerInstallTimeout;
   delete android.capabilities.uiautomator2ServerLaunchTimeout;
+  delete android.capabilities.disableWindowAnimation;
   android.capabilities.automationName = android.capabilities.automationName.toLowerCase(); // NOTE-RT: Sauce Labs wants this to be lowercase for some reason
 
   delete ios.capabilities.waitforTimeout;
