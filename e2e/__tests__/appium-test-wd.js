@@ -3,11 +3,12 @@ import * as wd from 'wd';
 import * as capabilities from '../capabilities';
 import {DEVICE_TIMEOUT, JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
 
+jest.setTimeout(JEST_TIMEOUT);
+
 describe('Create Android session (wd)', () => {
   let driver;
 
   beforeAll(async () => {
-    jest.setTimeout(JEST_TIMEOUT);
 
     const {capabilities: deviceConfig, ...serverConfig} = capabilities[TARGET_PLATFORM];
 

@@ -32,6 +32,7 @@
     "emulator:android:kill": "if [ -f /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid ]; then echo \"Killing Android emulator (`cat /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid\"; kill -9 `cat /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid`; rm /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid; fi;"
   },
   "dependencies": {
+    "jest-circus": "^24.7.1",
     "react": "16.8.3",
     "react-native": "0.59.4"
   },
