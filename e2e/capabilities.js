@@ -69,7 +69,8 @@ export const android = {
     platformVersion: ANDROID_PLATFORM_VERSION,
     app: ANDROID_APPLICATION_PATH,
     adbExecTimeout: DEVICE_TIMEOUT,
-    androidDeviceReadyTimeout: DEVICE_TIMEOUT,
+    deviceReadyTimeout: DEVICE_TIMEOUT / 1000, // NOTE-RT: This is actually just in seconds
+    androidDeviceReadyTimeout: DEVICE_TIMEOUT / 1000, // NOTE-RT: This is actually just in seconds
     androidInstallTimeout: DEVICE_TIMEOUT,
     appWaitDuration: DEVICE_TIMEOUT,
     avdLaunchTimeout: DEVICE_TIMEOUT,
@@ -104,6 +105,7 @@ if (process.env.SAUCE) {
   delete android.capabilities.commandTimeout;
   delete android.capabilities.newCommandTimeout;
   delete android.capabilities.adbExecTimeout;
+  delete android.capabilities.deviceReadyTimeout;
   delete android.capabilities.androidDeviceReadyTimeout;
   delete android.capabilities.androidInstallTimeout;
   delete android.capabilities.appWaitDuration;
