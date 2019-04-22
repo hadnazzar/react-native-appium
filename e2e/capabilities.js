@@ -1,5 +1,7 @@
 import {
   ANDROID_APPLICATION_PATH,
+  ANDROID_AVD_ARGS,
+  ANDROID_AVD_NAME,
   ANDROID_DEVICE_NAME,
   ANDROID_PLATFORM_VERSION,
   APPIUM_HOST,
@@ -77,7 +79,9 @@ export const android = {
     avdReadyTimeout: DEVICE_TIMEOUT,
     uiautomator2ServerInstallTimeout: DEVICE_TIMEOUT,
     uiautomator2ServerLaunchTimeout: DEVICE_TIMEOUT,
-    disableWindowAnimation: process.env.HEADLESS || process.env.CI || false
+    disableWindowAnimation: process.env.HEADLESS || process.env.CI || false,
+    avd: ANDROID_AVD_NAME,
+    avdArgs: ANDROID_AVD_ARGS
   }
 };
 

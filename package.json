@@ -25,7 +25,7 @@
     "emulator:android:delete": "avdmanager delete avd -n $(node -p 'require(\"./package.json\").name')",
     "emulator:android:start": "emulator -avd $(node -p 'require(\"./package.json\").name') -no-audio -no-window & echo $! > /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid; echo \"Started Android emulator (`cat /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').emulator.android.pid\"; ./bin/android-wait-for-emulator",
     "appium:start": "appium & echo $! > /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; echo \"Started server (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\";",
-    "pree2e": "npm run emulator:android:kill; npm run emulator:android:start; npm run appium:kill; npm run appium:start",
+    "pree2e": "npm run emulator:android:kill; npm run emulator:android:start; npm run appium:kill; npm run appium:start; adb wait-for-device get-serialno;",
     "e2e": "npm run appium:test",
     "poste2e": "npm run appium:kill; npm run emulator:android:kill",
     "appium:kill": "if [ -f /tmp/$(node -p 'require(\"./package.json\").name').appium.pid ]; then echo \"Killing appium (`cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`) from /tmp/$(node -p 'require(\"./package.json\").name').appium.pid\"; kill -9 `cat /tmp/$(node -p 'require(\"./package.json\").name').appium.pid`; rm /tmp/$(node -p 'require(\"./package.json\").name').appium.pid; fi;",
