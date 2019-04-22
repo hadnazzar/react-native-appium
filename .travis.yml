@@ -76,7 +76,7 @@ jobs:
         - npm run appium:kill
         - npm run appium:start
       script:
-        - ANDROID_PLATFORM_VERSION=$ANDROID_EMULATOR_PLATFORM_VERSION JEST_TIMEOUT=600000 DEVICE_TIMEOUT=300000 npm run appium:test
+        - ANDROID_PLATFORM_VERSION=$ANDROID_EMULATOR_PLATFORM_VERSION JEST_TIMEOUT=600000 DEVICE_TIMEOUT=300000 DRIVER_INITIALIZATION_TIMEOUT=30000 npm run appium:test
       after_script:
         - npm run poste2e # NOTE-RT: Make sure we kill things and clean up
         - android delete avd -n $(node -p 'require("./package.json").name') # NOTE-RT: This should really be `npm run emulator:android:delete`
