@@ -61,6 +61,12 @@ if (process.env.TESTOBJECT) {
   common.capabilities.privateDevicesOnly = process.env.TESTOBJECT_PRIVATE_DEVICES_ONLY ? JSON.parse(process.env.TESTOBJECT_PRIVATE_DEVICES_ONLY) : false;
 }
 
+if (process.env.PERFECTO) {
+  // NOTE-RT: These seem to be a constant requirement, but my testing seems to indicate that it's not required for auth. And still the expected `user` value isn't consistent.
+  common.capabilities.user = common.user; // NOTE-RT: Per https://developers.perfectomobile.com/pages/viewpage.action?pageId=11174626, but their broken JS WDIO example wants a `@perfectomobile.com` appended to the end... https://github.com/PerfectoCode/Samples/tree/master/Appium/JavaScript#getting-started
+  common.capabilities.password = common.pwd;
+}
+
 export const android = {
   ...common,
   capabilities: {
@@ -133,4 +139,39 @@ if (process.env.TESTOBJECT) {
 
   delete ios.capabilities.deviceName; // FIXME-RT: Per the above
   delete ios.capabilities.platformVersion; // FIXME-RT: Per the above
+}
+
+if (process.env.PERFECTO) {
+  delete android.capabilities.appiumVersion;
+  delete android.capabilities.waitforTimeout;
+  delete android.capabilities.commandTimeout;
+  delete android.capabilities.newCommandTimeout;
+  delete android.capabilities.adbExecTimeout;
+  delete android.capabilities.deviceReadyTimeout;
+  delete android.capabilities.androidDeviceReadyTimeout;
+  delete android.capabilities.androidInstallTimeout;
+  delete android.capabilities.appWaitDuration;
+  delete android.capabilities.avdLaunchTimeout;
+  delete android.capabilities.avdReadyTimeout;
+  delete android.capabilities.uiautomator2ServerInstallTimeout;
+  delete android.capabilities.uiautomator2ServerLaunchTimeout;
+  delete android.capabilities.disableWindowAnimation;
+  delete android.capabilities.deviceName;
+  delete android.capabilities.isHeadless;
+  android.capabilities.automationInfrastructure = 'UIAutomator2'; // NOTE-RT: https://developers.perfectomobile.com/display/TT/Select+a+Device+Based+on+Automation+Infrastructure differs from https://developers.perfectomobile.com/display/PD/Supported+Appium+Capabilities...
+  android.capabilities.automationName = android.capabilities.automationInfrastructure; // NOTE-RT: Per https://developers.perfectomobile.com/display/PD/Supported+Appium+Capabilities
+  android.capabilities.appPackage = 'com.apktest'; // NOTE-RT: Per https://developers.perfectomobile.com/display/PD/Supported+Appium+Capabilities#SupportedAppiumCapabilities-Android
+  android.capabilities.appActivity = '.MainActivity'; // NOTE-RT: Per https://developers.perfectomobile.com/display/PD/Supported+Appium+Capabilities#SupportedAppiumCapabilities-Android
+  // NOTE-RT: I shouldn't need these according to https://developers.perfectomobile.com/pages/viewpage.action?pageId=11174626 I can't get a matching capability
+  // android.capabilities.manufacturer = "Samsung";
+  // android.capabilities.model = "Galaxy S10e";
+  // android.capabilities.resolution = "1080x2280";
+  // android.capabilities.deviceName = 'R58M21YXQBL';
+
+  delete ios.capabilities.appiumVersion;
+  delete ios.capabilities.waitforTimeout;
+  delete ios.capabilities.commandTimeout;
+  delete ios.capabilities.newCommandTimeout;
+  delete ios.capabilities.adbExecTimeout;
+  // ios.capabilities.deviceName = '17E62A82172A36293D316B522623430FD9D7EA0C';
 }

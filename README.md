@@ -56,6 +56,10 @@ export TESTOBJECT_ACCESS_KEY=
 export BROWSERSTACK_USERNAME=
 export BROWSERSTACK_ACCESS_KEY=
 
+# BrowserStack free trial per https://www.perfecto.io/perfecto-free-trial/
+export PERFECTO_USERNAME=
+export PERFECTO_PASSWORD=
+
 # Upload and run tests on Sauce Labs (emulated)
 yarn run upload:e2e:sauce
 yarn run test:e2e:sauce
@@ -66,4 +70,8 @@ yarn run test:e2e:testobject
 # Run it on BrowserStack
 yarn run upload:e2e:browserstack
 yarn run test:e2e:browserstack
+
+# Run it on Perfecto
+yarn run upload:e2e:perfecto
+yarn run test:e2e:perfecto
 ```
