@@ -11,8 +11,8 @@ export const DEVICE_TIMEOUT = process.env.DEVICE_TIMEOUT || 1.5 * 60 * 1000;
 
 export const DRIVER_INITIALIZATION_TIMEOUT = process.env.DRIVER_INITIALIZATION_TIMEOUT || 5 * 1000;
 
-export const IOS_DEVICE_NAME = process.env.IOS_DEVICE_NAME || 'iPhone SE';
-export const IOS_PLATFORM_VERSION = process.env.IOS_PLATFORM_VERSION || '12.1';
+export const IOS_DEVICE_NAME = process.env.IOS_DEVICE_NAME;
+export const IOS_PLATFORM_VERSION = process.env.IOS_PLATFORM_VERSION;
 export const IOS_APPLICATION_PATH = process.env.IOS_APPLICATION_PATH; // FIXME-RT: Provide a real directory here
 
 export const APPIUM_HOST = process.env.APPIUM_HOST || 'localhost';
