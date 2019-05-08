@@ -1,3 +1,5 @@
+import {version as appiumVersion} from 'appium/package.json'
+import {name} from '../package.json'
 import {
   ANDROID_APPLICATION_PATH,
   ANDROID_AVD_ARGS,
@@ -14,9 +16,7 @@ import {
   IOS_DEVICE_NAME,
   IOS_PLATFORM_VERSION,
   TARGET_PLATFORM
-} from './constants';
-import {name} from '../package.json';
-import {version as appiumVersion} from 'appium/package.json';
+} from './constants'
 
 const common = {
   hostname: APPIUM_HOST,
@@ -41,6 +41,8 @@ if (process.env.BROWSERSTACK) {
   common.capabilities['browserstack.debug'] = true;
   common.capabilities['browserstack.video'] = true;
   common.capabilities['browserstack.networkLogs'] = true;
+  common.capabilities.appiumVersion = '1.9.1' // FIXME-RT: Ugh. 🤞 this doesn't break 'cause we're actually on 1.12.1
+  common.capabilities['browserstack.appium_version'] = common.capabilities.appiumVersion
   common.capabilities.build = `${name}:${TARGET_PLATFORM}`;
 }
 
@@ -76,11 +78,11 @@ export const android = {
     deviceName: ANDROID_DEVICE_NAME,
     platformVersion: ANDROID_PLATFORM_VERSION,
     app: ANDROID_APPLICATION_PATH,
-    adbExecTimeout: DEVICE_TIMEOUT,
+    adbExecTimeout: 30,
     deviceReadyTimeout: DEVICE_TIMEOUT / 1000, // NOTE-RT: This is actually just in seconds
     androidDeviceReadyTimeout: DEVICE_TIMEOUT / 1000, // NOTE-RT: This is actually just in seconds
     androidInstallTimeout: DEVICE_TIMEOUT,
-    appWaitDuration: DEVICE_TIMEOUT,
+    appWaitDuration: 10,
     avdLaunchTimeout: DEVICE_TIMEOUT,
     avdReadyTimeout: DEVICE_TIMEOUT,
     uiautomator2ServerInstallTimeout: DEVICE_TIMEOUT,
