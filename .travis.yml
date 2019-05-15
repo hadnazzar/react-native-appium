@@ -1,0 +1,100 @@
+notifications:
+  email: false
+os: linux
+dist: trusty # NOTE-RT: This needs to be `trusty`, android builds just hang on `xenial` :\
+env:
+  global:
+    - ANDROID_PLATFORM_VERSION=9
+    - ANDROID_API_VERSION=28
+    - ANDROID_TOOLS_BUILD_VERSION=4333796 # NOTE-RT: To match `ANDROID_API_VERSION`
+    - ANDROID_BUILD_TOOLS_VERSION=28.0.3
+    - ANDROID_EMULATOR_PLATFORM_VERSION=6.0
+    - ANDROID_EMULATOR_API_VERSION=23
+    - ANDROID_EMULATOR_ABI=armeabi-v7a
+jobs:
+  allow_failures:
+    - stage: E2E
+      name: Android (local)
+  include:
+    - language: node_js
+      node_js: 10
+      cache: yarn
+    - stage: E2E
+      name: Android (local)
+      sudo: required
+      language: android
+      jdk: oraclejdk8
+      cache: yarn
+      android:
+        components:
+          - tools
+          - platform-tools
+      before_install:
+        - export ANDROID_HOME=~/android-sdk
+        - export ANDROID_SDK_ROOT=$ANDROID_HOME
+        - |
+          if [ $TRAVIS_OS_NAME == "linux" ]; then
+            export DISPLAY=:99.0;
+            sh -e /etc/init.d/xvfb start;
+            sleep 3; # give xvfb some time to start
+          fi
+        - wget -q "https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_TOOLS_BUILD_VERSION.zip" -O android-sdk-tools.zip
+        - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
+        - rm android-sdk-tools.zip
+        - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+        - mkdir -p ~/.android
+        - touch ~/.android/repositories.cfg
+        - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        - |
+          $ANDROID_HOME/tools/bin/sdkmanager \
+            "tools" \
+            "platform-tools" \
+            "emulator" \
+            "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
+            "system-images;android-$ANDROID_EMULATOR_API_VERSION;google_apis;$ANDROID_EMULATOR_ABI" \
+            "patcher;v4" \
+            "platforms;android-$ANDROID_API_VERSION" \
+            "platforms;android-$ANDROID_EMULATOR_API_VERSION" \
+            "extras;google;google_play_services" \
+            "extras;google;m2repository" \
+            "extras;android;m2repository" > /dev/null
+        - openssl aes-256-cbc -K $encrypted_78b6aab41b54_key -iv $encrypted_78b6aab41b54_iv -in android/app/my-release-key.keystore.enc -out android/app/my-release-key.keystore -d
+        - export NODE_VERSION=${TRAVIS_NODE_VERSION:=10}
+        - nvm install $NODE_VERSION
+        - npm install -g yarn
+      install:
+        - yarn install
+        - npm run build:android
+      before_script:
+        - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -n $(node -p 'require("./package.json").name') -k "system-images;android-$ANDROID_EMULATOR_API_VERSION;google_apis;$ANDROID_EMULATOR_ABI" # NOTE-RT: This should really be `yarn run emulator:android:create`
+        # NOTE-RT: The following here should really be `npm run pree2e`
+        - EMU_ADDITIONAL_OPTIONS="-no-boot-anim -no-audio -no-window -memory 2048"
+        - EMU_PARAMS="-gpu off"
+        - $ANDROID_HOME/emulator/emulator -avd $(node -p 'require("./package.json").name') $EMU_PARAMS $EMU_ADDITIONAL_OPTIONS ${EMU_DEBUG} &  echo $! > /tmp/$(node -p 'require("./package.json").name').emulator.android.pid; echo "Started Android emulator (`cat /tmp/$(node -p 'require("./package.json").name').emulator.android.pid`) from /tmp/$(node -p 'require("./package.json").name').emulator.android.pid"
+        - ./bin/android-wait-for-emulator
+        - $ANDROID_HOME/platform-tools/adb devices
+        - $ANDROID_HOME/platform-tools/adb shell input keyevent 82 &
+        - npm run appium:kill
+        - npm run appium:start
+      script:
+        - ANDROID_PLATFORM_VERSION=$ANDROID_EMULATOR_PLATFORM_VERSION JEST_TIMEOUT=600000 DEVICE_TIMEOUT=300000 DRIVER_INITIALIZATION_TIMEOUT=30000 npm run appium:test
+      after_script:
+        - npm run poste2e # NOTE-RT: Make sure we kill things and clean up
+        - android delete avd -n $(node -p 'require("./package.json").name') # NOTE-RT: This should really be `npm run emulator:android:delete`
+#    - name: E2E tests (iOS)
+#      os: osx
+#      language: objective-c
+#      podfile: ios/Podfile
+#      osx_image: xcode10.2
+#      cache:
+#        - yarn
+#        - cocoapods
+#      before_install:
+#        - export NODE_VERSION=${TRAVIS_NODE_VERSION:=10}
+#        - nvm install $NODE_VERSION
+#        - npm install -g yarn
+#      install:
+#        - yarn install
+#        - pushd ios && pod install && popd ios
+
+

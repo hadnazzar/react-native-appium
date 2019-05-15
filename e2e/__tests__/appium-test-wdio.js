@@ -1,7 +1,7 @@
-import * as wdio from 'webdriverio';
-import * as capabilities from '../capabilities';
-import {JEST_TIMEOUT, TARGET_PLATFORM} from '../constants';
-import path from 'path';
+import path from 'path'
+import * as wdio from 'webdriverio'
+import * as capabilities from '../capabilities'
+import {JEST_TIMEOUT, TARGET_PLATFORM} from '../constants'
 
 xdescribe('Create Android session (wdio)', () => {
   let client;
