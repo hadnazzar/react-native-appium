@@ -48,7 +48,7 @@ if (process.env.SAUCE) {
 if (process.env.TESTOBJECT) {
   delete common.user;
   delete common.pwd;
-  common.capabilities.appiumVersion = '1.9.1'; // FIXME-RT: Ugh. 🤞 this doesn't break 'cause we're actually on 1.12.1
+  common.capabilities.appiumVersion = '1.12.1'; // FIXME-RT: Ugh. 🤞 this doesn't break 'cause we're actually on 1.12.1
   common.capabilities.testobject_api_key = APPIUM_PASSWORD;
   common.capabilities.testobject_session_creation_timeout = DEVICE_TIMEOUT;
   common.capabilities.testobject_app_id = process.env.TESTOBJECT_APP_ID || undefined;
